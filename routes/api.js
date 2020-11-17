@@ -1,7 +1,7 @@
 const express = require('express');
-
 // Defining a router
 const router = express.Router();
+const Article = require('../models/article-schema');
 
 //using router to create routes
 
