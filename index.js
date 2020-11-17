@@ -7,14 +7,16 @@ const mongoose = require('mongoose');
 const app = express();
 
 // connect to mongodb
-mongoose.connect("mongodb+srv://achille:Dmsig1806110@cluster0.ixyfa.mongodb.net/mybrand?retryWrites=true&w=majority", {useUnifiedTopology: true }).then(function(){
+mongoose.connect("mongodb+srv://achille:Dmsig1806110@cluster0.ixyfa.mongodb.net/mybrand?retryWrites=true&w=majority", { useNewUrlParser: true , useUnifiedTopology: true }).then(function(){
     console.log('db connected');
 }).catch((err)=>{
     console.log(err.message);
 });
 mongoose.Promise = global.Promise;
 
+
 // initialize middle ware of body parser
+// app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 // initialize routes

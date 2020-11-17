@@ -3,9 +3,6 @@ const express = require('express');
 const router = express.Router();
 const Article = require('../models/article-schema');
 
-//using router to create routes
-
-
 // get articles from the database
 router.get('/articles', function(req, res){
     res.send({type: 'GET'});
