@@ -13,7 +13,11 @@ router.get('/articles', function(req, res){
 
 // upload articles from the database
 router.post('/articles', function(req, res){
-    res.send({type: 'POST'});
+    Article.create(req.body).then(function(article){
+        res.send(`Article have been submitted. It incudes this ${article}`);
+    }).catch((err)=>{
+        res.send(err.message)
+    });
 })
 
 // update articles from the database

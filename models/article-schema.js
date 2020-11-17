@@ -9,23 +9,18 @@ const ArticleSchema = new Schema({
     },
     author: {
         type: String,
-        required: [true, "The author is needed"]
+        default: "Achille Songa"
     },
     summary: {
-        type: String
+        type: String,
+        required: [false, "Summary is optional"]
     },
     content: {
-        type: String
-    },
-    image: {
-        name: String,
-        image: { 
-            data: Buffer, 
-            contentType: String 
-        }
+        type: String,
+        required: [false, "Content is optional"]
     }
 });
 
 const Article = mongoose.model('article', ArticleSchema);
 
-module.exports = Ninja;
+module.exports = Article;
