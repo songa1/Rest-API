@@ -5,7 +5,11 @@ const Article = require('../models/article-schema');
 
 // get articles from the database
 router.get('/articles', function(req, res){
-    res.send({type: 'GET'});
+    Article.find({}).then(function(articles){
+        res.send(articles);
+    }).catch((err)=>{
+        res.send(err.message);
+    })
 })
 
 // upload articles from the database
