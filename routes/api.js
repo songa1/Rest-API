@@ -23,7 +23,11 @@ router.post('/articles', function(req, res){
 
 // update articles from the database
 router.put('/articles/:id', function(req, res){
-    res.send({type: 'PUT'});
+    Article.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
+        Article.findOne({_id: req.params.id}).then(function(article){
+            res.send(article);
+        })
+    })
 })
 
 // delete articles from the database
