@@ -28,7 +28,9 @@ router.put('/articles/:id', function(req, res, next){
 
 // delete articles from the database
 router.delete('/articles/:id', function(req, res, next){
-    
+    Article.findByIdAndDelete({_id: req.params.id}).then(function(article){
+        res.send(`This article has been deleted successfully: ${article}`);
+    }).catch(next);
 })
 
 
