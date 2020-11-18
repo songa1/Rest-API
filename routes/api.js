@@ -4,35 +4,31 @@ const router = express.Router();
 const Article = require('../models/article-schema');
 
 // get articles from the database
-router.get('/articles', function(req, res){
+router.get('/articles', function(req, res, next){
     Article.find({}).then(function(articles){
         res.send(articles);
-    }).catch((err)=>{
-        res.send(err.message);
-    })
+    }).catch(next);
 })
 
 // upload articles from the database
-router.post('/articles', function(req, res){
+router.post('/articles', function(req, res, next){
     Article.create(req.body).then(function(article){
         res.send(`Article have been submitted. It incudes this ${article}`);
-    }).catch((err)=>{
-        res.send(err.message)
-    });
+    }).catch(next);
 })
 
 // update articles from the database
-router.put('/articles/:id', function(req, res){
+router.put('/articles/:id', function(req, res, next){
     Article.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
         Article.findOne({_id: req.params.id}).then(function(article){
             res.send(article);
-        })
+        }).catch(next);
     })
 })
 
 // delete articles from the database
-router.delete('/articles/:id', function(req, res){
-    res.send({type: 'DELETE'});
+router.delete('/articles/:id', function(req, res, next){
+    
 })
 
 
