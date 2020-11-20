@@ -26,7 +26,6 @@ const getOneArticle = function(req, res, next){
 
 // upload articles to the database
 const postArticles = function(req, res, next){
-    console.log(req.file);
     const article = new Article({
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
@@ -45,9 +44,15 @@ const postArticles = function(req, res, next){
 // update articles from the database
 
 const updateArticles = function(req, res, next){
-    Article.findByIdAndUpdate({_id: req.params.id}, req.body, req.file).then(function(){
+    Article.findByIdAndUpdate({_id: req.params.id},{
+        title: req.body.title,
+        author: req.body.author,
+        summary: req.body.summary,
+        content: req.body.content,
+        image: req.file.path
+    }).then(function(){
         Article.findOne({_id: req.params.id}).then(function(article){
-            res.send(article);
+            res.send(`Article have been updated successfuly: ${article}`);
         }).catch(next);
     })
 };

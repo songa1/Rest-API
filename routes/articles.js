@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/',upload.single('image'), postArticles);
 router.get('/', getArticles);
 router.get('/:id', getOneArticle);
-router.put('/:id', updateArticles);
+router.put('/:id', upload.single('image'), updateArticles);
 router.delete('/:id', deleteArticles);
 
 
