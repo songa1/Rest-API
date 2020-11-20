@@ -2,6 +2,7 @@ const express = require('express');
 const routes = require('./routes/api');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
 
 // I'm going to setup my express app
 const app = express();
@@ -21,6 +22,11 @@ app.use(bodyParser.json());
 
 // initialize routes
 app.use('/api',routes);
+
+// error handling middleware
+app.use(function(err, req, res, next){
+    res.status(422).send({error: err.message});
+});
 
 // Listen for request on specified port
 app.listen(process.env.port || 2701, function(){
