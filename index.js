@@ -16,6 +16,9 @@ mongoose.connect("mongodb+srv://achille:Dmsig1806110@cluster0.ixyfa.mongodb.net/
 mongoose.Promise = global.Promise;
 
 
+// make uploads folder publicly accessible
+app.use('/uploads', express.static('uploads'));
+
 // initialize middle ware of body parser
 // app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -25,6 +28,7 @@ app.use('/api',routes);
 
 // error handling middleware
 app.use(function(err, req, res, next){
+    console.log(err);
     res.status(422).send({error: err.message});
 });
 

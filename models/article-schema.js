@@ -18,6 +18,9 @@ const ArticleSchema = new Schema({
     content: {
         type: String,
         required: [false, "Summary is optional"]
+    },
+    image: {
+        type: String
     }
 });
 
