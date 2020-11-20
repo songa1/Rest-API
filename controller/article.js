@@ -15,11 +15,11 @@ const getArticles = function(req, res, next){
 // get single article
 const getOneArticle = function(req, res, next){
     Article.findOne({_id: req.params.id}).then(function(article){
-        if(article == 0){
+        if(article){
+            res.send(article);
+        }else{
             res.send("Article not found!");
             console.log("Article not found!");
-        }else{
-            res.send(article);
         } 
     }).catch(next);
 }
