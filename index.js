@@ -1,14 +1,15 @@
 const express = require('express');
-const routes = require('./routes/api');
+const routes = require('./routes/index');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false);
+require('dotenv').config();
 
 // I'm going to setup my express app
 const app = express();
 
 // connect to mongodb
-mongoose.connect("mongodb+srv://achille:Dmsig1806110@cluster0.ixyfa.mongodb.net/mybrand?retryWrites=true&w=majority", { useNewUrlParser: true , useUnifiedTopology: true }).then(function(){
+mongoose.connect(process.env.dbConnection, { useNewUrlParser: true , useUnifiedTopology: true }).then(function(){
     console.log('db connected');
 }).catch((err)=>{
     console.log(err.message);
