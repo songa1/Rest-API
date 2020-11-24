@@ -7,12 +7,11 @@ const profileRoute = require('./profile');
 const skillRoute = require('./skills');
 const projectRoute = require('./project');
 const commentRoute = require('./comments');
+const homeIndex = require('./home');
 
 
 
-router.use('/', function(req, res, next){
-    res.send("You have now access to my API application, \n It's working!");
-}).catch(next);
+router.use('/', homeIndex);
 router.use('/articles', articleRoute);
 router.use('/queries', queryRoute);
 router.use('/profile', profileRoute);
