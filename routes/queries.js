@@ -1,5 +1,4 @@
 const express = require('express');
-const { deleteArticles } = require('../controller/article');
 const {getQueries, postQueries, deleteQueries} = require('../controller/queries');
 const upload = require('../upload/articles')
 

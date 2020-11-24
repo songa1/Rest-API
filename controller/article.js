@@ -34,9 +34,7 @@ const postArticles = function(req, res, next){
         content: req.body.content,
         image: req.file.path
     });
-    article
-    .save()
-    .then(function(article){
+    article.save().then(function(article){
         res.send(`Article have been submitted. It incudes this information: ${article}`);
     }).catch(next);
 }
