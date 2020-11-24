@@ -1,6 +1,6 @@
 const express = require('express');
 const {getArticles, getOneArticle, postArticles, updateArticles, deleteArticles} = require('../controller/article');
-const upload = require('../upload/images')
+const upload = require('../upload/articles')
 
 const router = express.Router();
 

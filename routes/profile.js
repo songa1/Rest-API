@@ -1,6 +1,6 @@
 const express = require('express');
 const {getUsers, getOneUser, addUser, updateUser, deleteUser} = require('../controller/profile');
-const upload = require('../upload/images')
+const upload = require('../upload/articles')
 
 const router = express.Router();
 

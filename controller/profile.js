@@ -1,18 +1,18 @@
 const express = require('express');
 // Defining a router
 const router = express.Router();
-// including article model
+// including profile model
 const Profile = require('../models/profile-schema');
 const mongoose = require('mongoose');
 
-// get articles from the database
+// get users from the database
 const getUsers = function(req, res, next){
     Profile.find({}).then(function(profile){
         res.send(profile);
     }).catch(next);
 }
 
-// get single article
+// get single user
 const getOneUser = function(req, res, next){
     Profile.findOne({_id: req.params.id}).then(function(profile){
         if(profile){
@@ -24,7 +24,7 @@ const getOneUser = function(req, res, next){
     }).catch(next);
 }
 
-// upload articles to the database
+// upload user to the database
 const addUser = function(req, res, next){
     const profile = new Profile({
         _id: new mongoose.Types.ObjectId(),
@@ -39,7 +39,7 @@ const addUser = function(req, res, next){
     }).catch(next);
 }
 
-// update articles from the database
+// update users from the database
 
 const updateUser = function(req, res, next){
     Profile.findByIdAndUpdate({_id: req.params.id},{
@@ -55,7 +55,7 @@ const updateUser = function(req, res, next){
     })
 };
 
-// delete articles from the database
+// delete users from the database
 
 const deleteUser = function(req, res, next){
     Profile.findByIdAndDelete({_id: req.params.id}).then(function(profile){

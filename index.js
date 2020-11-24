@@ -19,6 +19,9 @@ mongoose.Promise = global.Promise;
 
 // make uploads folder publicly accessible
 app.use('/uploads', express.static('uploads'));
+app.use('/uploads/skills', express.static('uploads'));
+app.use('/uploads/articles', express.static('uploads'));
+app.use('/uploads/user-profile', express.static('uploads'));
 
 // initialize middle ware of body parser
 // app.use(bodyParser.urlencoded({extended: true}));
