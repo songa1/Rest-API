@@ -38,6 +38,6 @@ app.use(function(err, req, res, next){
 });
 
 // Listen for request on specified port
-app.listen(process.env.port || 2701, function(){
+app.listen(process.env.PORT || 2701, function(){
     console.log('Now listening to requests!');
 })
