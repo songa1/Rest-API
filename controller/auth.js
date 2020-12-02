@@ -32,7 +32,7 @@ const loginPost = async (req, res, next)=>{
             httpOnly: true, 
             maxAge: maxAge * 48
         })
-        return successHandler(res, 200, 'Successfully logged in', user._id);
+        return successHandler(res, 201, 'Successfully logged in', user._id);
     }
     catch (err) {
         return errorRes(res, 500, 'Failed to login', error);

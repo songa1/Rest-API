@@ -4,12 +4,18 @@ const router = express.Router();
 // including profile model
 const Profile = require('../models/profile-schema');
 const mongoose = require('mongoose');
+const successHandler = require('../helpers/successhandle');
+const errorRes = require('../helpers/error');
 
 // get users from the database
 const getUsers = function(req, res, next){
     Profile.find({}).then(function(profile){
-        res.send(profile);
-    }).catch(next);
+        return successHandler(res, 200, 'Successfully got owner',
+            profile
+        );
+    }).catch((error)=>{
+        return errorRes(res, 500, 'Can not get owner', error);
+    });
 }
 
 // get single user
@@ -35,8 +41,12 @@ const addUser = function(req, res, next){
         image: req.file.path
     });
     profile.save().then(function(profile){
-        res.send(`New user added successfully: ${profile}`);
-    }).catch(next);
+        return successHandler(res, 201, 'Successfully added owner',
+            profile
+        );
+    }).catch((error)=>{
+        return errorRes(res, 500, 'Can not add owner', error);
+    });
 }
 
 // update users from the database

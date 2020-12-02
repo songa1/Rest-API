@@ -6,8 +6,8 @@ const router = express.Router();
 
 
 router.post('/', postQueries);
-router.get('/',requireAuth, getQueries);
-router.delete('/:id',requireAuth, deleteQueries);
+router.get('/', getQueries);
+router.delete('/:id', deleteQueries);
 
 
 module.exports = router;
