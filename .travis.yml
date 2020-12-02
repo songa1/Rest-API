@@ -1,17 +1,17 @@
 language: node_js
 node_js:
-    - 'stable'
+  - 'stable'
   
-  services:
-    - mongodb
+services:
+  - mongodb
   
-  script:
-    - npm ci
-    - npm run coverage
+script:
+  - npm ci
+  - npm run coverage
   
-  notifications:
-    email: false
+notifications:
+  email: false
   
-  after_success:
-    - npm run coveralls
+after_success:
+  - npm run coveralls
   
