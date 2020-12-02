@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "NODE_ENV=test nyc mocha --timeout 120000 ./tests/**.test.js --exit",
-    "coveralls": "npm run pretest && jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "coveralls": "jest --coverage && coveralls < coverage/lcov.info",
     "coverage": "nyc npm run test"
   },
   "repository": {
