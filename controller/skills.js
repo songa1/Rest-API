@@ -4,12 +4,18 @@ const router = express.Router();
 // including skill model
 const Skill = require('../models/skills-schema');
 const mongoose = require('mongoose');
+const successHandler = require('../helpers/successhandle');
+const errorRes = require('../helpers/error');
 
 // get skills from the database
 const getSkills = function(req, res, next){
     Skill.find({}).then(function(skill){
-        res.send(skill);
-    }).catch(next);
+        return successHandler(res, 200, 'Got skills', {
+            skill
+        });
+    }).catch((error)=>{
+        return errorRes(res, 500, 'Can not get skills', error);
+    });
 }
 
 // upload skills to the database
@@ -21,8 +27,12 @@ const addSkill = function(req, res, next){
         image: req.file.path
     });
     skill.save().then(function(skill){
-        res.send(`New skill added successfully: ${skill}`);
-    }).catch(next);
+        return successHandler(res, 201, 'Skill added', {
+            skill
+        });
+    }).catch((error)=>{
+        return errorRes(res, 500, 'Can not add skill', error);
+    });
 }
 
 // update skills from the database
@@ -34,8 +44,12 @@ const updateSkill = function(req, res, next){
         image: req.file.path
     }).then(function(){
         Skill.findOne({_id: req.params.id}).then(function(skill){
-            res.send(`Skills have been updated successfuly: ${skill}`);
-        }).catch(next);
+            return successHandler(res, 201, 'Skill updated', {
+                skill
+            });
+        }).catch((error)=>{
+            return errorRes(res, 500, 'Can not update skill', error);
+        });
     })
 };
 
@@ -43,8 +57,12 @@ const updateSkill = function(req, res, next){
 
 const deleteSkills = function(req, res, next){
     Skill.findByIdAndDelete({_id: req.params.id}).then(function(skill){
-        res.send(`This skill has been deleted successfully: ${skill}`);
-    }).catch(next);
+        return successHandler(res, 200, 'Skill deleted', {
+            skill
+        });
+    }).catch((error)=>{
+        return errorRes(res, 500, 'Can not delete skill', error);
+    });
 }
 
 // exporting

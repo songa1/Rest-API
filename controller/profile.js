@@ -22,12 +22,16 @@ const getUsers = function(req, res, next){
 const getOneUser = function(req, res, next){
     Profile.findOne({_id: req.params.id}).then(function(profile){
         if(profile){
-            res.send(profile);
+            return successHandler(res, 200, 'Got one owner',
+            profile
+        );
         }else{
             res.send("User  not found!");
             console.log("User not found!");
         } 
-    }).catch(next);
+    }).catch((error)=>{
+        return errorRes(res, 500, 'Can not get owner', error);
+    });
 }
 
 // upload user to the database
@@ -60,8 +64,12 @@ const updateUser = function(req, res, next){
         image: req.file.path
     }).then(function(){
         Profile.findOne({_id: req.params.id}).then(function(profile){
-            res.send(`Profile have been updated successfuly: ${profile}`);
-        }).catch(next);
+            return successHandler(res, 201, 'Successfully updated owner info',
+            profile
+        );
+        }).catch((error)=>{
+            return errorRes(res, 500, 'Can not update owner info', error);
+        });
     })
 };
 
@@ -69,8 +77,12 @@ const updateUser = function(req, res, next){
 
 const deleteUser = function(req, res, next){
     Profile.findByIdAndDelete({_id: req.params.id}).then(function(profile){
-        res.send(`This user has been deleted successfully: ${profile}`);
-    }).catch(next);
+        return successHandler(res, 200, 'This owner has been deleted successfully',
+            profile
+        );
+    }).catch((error)=>{
+        return errorRes(res, 500, 'Can not delete owner', error);
+    });
 }
 
 // exporting

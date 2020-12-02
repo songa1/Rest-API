@@ -11,6 +11,8 @@ const Queries = require('../models/quries-schema');
 const Query = require('../models/quries-schema');
 const Comments = require('../models/comments-schema');
 const Profile = require('../models/profile-schema');
+const Projects = require('../models/project-schema');
+const Skill = require('../models/skills-schema');
 
 const { it, describe, beforeEach, afterEach } = mocha;
 const {expect} = chai;
@@ -25,6 +27,25 @@ const mockPost = {
   };
 
 chai.use(chaiHttp);
+
+// test homepage
+describe('Test for homepage', async()=>{
+  it('Should get the homepage', async()=>{
+    let res = await request(app).get('/api');
+    expect(res.status).to.be.equal(200);
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.have.property('message', "You have now access to my API application, It's working!");
+  })
+})
+
+describe('Unknown route', () => {
+  it('Should return Not found(any request)', async () => {
+    const res = await request(app).get('/api/unknown');
+    expect(res.status).to.be.equal(404);
+    expect(res.body).to.be.a('object');
+  });
+});
+
 // Test on article requests
 describe('Testing articles', async ()=>{
     beforeEach(async () => {
@@ -259,6 +280,183 @@ describe('Tests related to owner profile', async()=>{
     expect(res.body).to.have.property('message', 'Successfully got owner');
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
+  });
+  // get single owner
+  const ownerInfo = {
+    "name": "testname",
+    "role": "developer",
+    "about": "his about",
+    "purpose": "his purpose"
+  }
+  it('Should get one  owner', async () => {
+
+    const owner = await Profile.create(ownerInfo);
+    await owner.save();
+
+    const res = await request(app).get(`/api/profile/${owner._id}`);
+    expect(res.status).to.be.equal(200);
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.have.property('message', 'Got one owner');
+    expect(res.body).to.have.property('data');
+    expect(res.body.data).to.be.a('object');
+  });
+// delete owner
+it('Should delete owner', async () => {
+    const owner = await Profile.create(ownerInfo);
+    await owner.save();
+
+    const res = await request(app).delete(`/api/profile/${owner._id}`);
+    expect(res.status).to.be.equal(200);
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.be.a('object');
+    expect(res.body).to.have.property('message', 'This owner has been deleted successfully');
+  });
+  // update owner
+  it('Should update owner', async () => {
+    const owner = await Profile.create(ownerInfo);
+    await owner.save();
+
+    const res = await request(app)
+    .put(`/api/profile/${owner._id}`)
+    .field('name', ownerInfo.name)
+    .field('role', ownerInfo.role)
+    .field('about', ownerInfo.about)
+    .field('purpose', ownerInfo.purpose)
+    .attach('image', path.resolve(__dirname, './img/blogger.png'));
+    expect(res.status).to.be.equal(201);
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.have.property('message', 'Successfully updated owner info');
+  });
+
 });
+
+
+// Tests on Projects 
+describe('Tests related to projects', async()=>{
+  beforeEach(async () => {
+    await Projects.deleteMany({});
+  });
+  afterEach(async () => {
+    await Projects.deleteMany({});
+  });
+
+  const testProject = {
+    "title": "ooo",
+    "description": "developer project",
+    "link": "www.google.com"
+  }
+  //Add NEW PROJECT
+  it('Should create a new project', async () => {
+    const res = await request(app)
+      .post('/api/projects')
+      .field('title',testProject.title)
+      .field('description', testProject.description)
+      .field('link', testProject.link)
+      .attach('image', path.resolve(__dirname, './img/ubutumwa.jpg'));
+    expect(res.status).to.be.equal(201);
+    expect(res.body).to.have.property('message','Successfully added new project');
+    expect(res.body).to.be.have.property('data');
+    expect(res.body.data).to.be.a('object');
+    expect(res.body.data).to.be.have.property('title');
+    expect(res.body.data).to.be.have.property('description');
+    expect(res.body.data).to.be.have.property('link');
+  });
+  // GET PROJECTS
+  it('Should get projects', async () => {
+    const res = await request(app).get('/api/projects');
+    expect(res.status).to.be.equal(200);
+    expect(res.body).to.have.property('message', 'Successfully got projects');
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.be.a('object');
+  });
+
+// delete PROJECT
+it('Should delete a project', async () => {
+    const project = await Projects.create(testProject);
+    await project.save();
+
+    const res = await request(app).delete(`/api/projects/${project._id}`);
+    expect(res.status).to.be.equal(200);
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.be.a('object');
+    expect(res.body).to.have.property('message', 'This project has been deleted successfully');
+  });
+  // update a project
+  it('Should update a project', async () => {
+    const project = await Projects.create(testProject);
+    await project.save();
+
+    const res = await request(app)
+    .put(`/api/projects/${project._id}`)
+    .field('title', testProject.title)
+    .field('description', testProject.description)
+    .field('link', testProject.link)
+    .attach('image', path.resolve(__dirname, './img/blogger.png'));
+    expect(res.status).to.be.equal(201);
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.have.property('message', 'Project updated');
+  });
+
+});
+
+ // Tests on skills
+describe('Tests related to skills', async()=>{
+  beforeEach(async () => {
+    await Skill.deleteMany({});
+  });
+  afterEach(async () => {
+    await Skill.deleteMany({});
+  });
+
+  const testSkill = {
+    "title": "html",
+    "category": "Front-End"
+  }
+  //Add new skill
+  it('Should create a new skill', async () => {
+    const res = await request(app)
+      .post('/api/skills')
+      .field('title',testSkill.title)
+      .field('category', testSkill.category)
+      .attach('image', path.resolve(__dirname, './img/ubutumwa.jpg'));
+    expect(res.status).to.be.equal(201);
+    expect(res.body).to.have.property('message','Skill added');
+    expect(res.body).to.be.have.property('data');
+    expect(res.body.data).to.be.a('object');
+  });
+  // GET owner's info
+  it('Should get skills', async () => {
+    const res = await request(app).get('/api/skills');
+    expect(res.status).to.be.equal(200);
+    expect(res.body).to.have.property('message', 'Got skills');
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.be.a('object');
+  });
+  
+  // delete owner
+it('Should delete skill', async () => {
+    const skill = await Skill.create(testSkill);
+    await skill.save();
+
+    const res = await request(app).delete(`/api/skills/${skill._id}`);
+    expect(res.status).to.be.equal(200);
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.be.a('object');
+    expect(res.body).to.have.property('message', 'Skill deleted');
+  });
+  // update owner
+  it('Should update skill', async () => {
+    const skill = await Skill.create(testSkill);
+    await skill.save();
+
+    const res = await request(app)
+    .put(`/api/skills/${skill._id}`)
+    .field('title', testSkill.title)
+    .field('category', testSkill.category)
+    .attach('image', path.resolve(__dirname, './img/blogger.png'));
+    expect(res.status).to.be.equal(201);
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.have.property('message', 'Skill updated');
+  });
 
 });

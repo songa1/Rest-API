@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 const router = express.Router();
 // including article model
 const Article = require('../models/article-schema');
-// including comments model
-const Comments = require('../models/comments-schema');
 const successHandler = require('../helpers/successhandle');
 const errorRes = require('../helpers/error');
+// including comments model
+const Comments = require('../models/comments-schema');
 
 
 // get articles from the database
@@ -83,7 +83,25 @@ const deleteArticles = function(req, res){
         return errorRes(res, 500, "Can't delete a post", error);
     });
 }
+// get comments
 
+const getComments = async (req, res)=>{
+
+        let postFound = await Comments.findById(req.params.id)
+        .populate('comments');
+        try {
+            return successHandler(
+                res,
+                200,
+                'successfully fetched all comments',
+                postFound.comments
+              );
+        }catch(error){
+            console.log(error.message)
+            return errorRes(res, 500, 'Error while fetching comments', error);
+            
+        }              
+}
 // post comments
 const postComment = async (req, res) => {
     
@@ -110,36 +128,7 @@ const postComment = async (req, res) => {
 
 };
 
-// get comments
 
-const getComments = async (req, res)=>{
-    try {
-        let postFound = await Article.findById(req.params.id)
-        .populate('comments')
-        .sort({ time: -1 });
-
-        
-            return successHandler(
-                res,
-                200,
-                'successfully fetched all comments',
-                postFound
-              );
-        
-      } catch (error) {
-            console.log(error.message);
-            return errorRes(res, 500, 'Error while fetching comments', error);
-      }
-}
-
-const GetOneComment = async (req, res) => {
-    try {
-        const oneComment = await Comments.findOne(req.params.id);
-        return successHandler(res, 200, 'this is one comment', oneComment);
-    } catch (error) {
-        return errorRes(res, 500, 'failed to fetch that');
-    }
-  };
 
 // exporting
 module.exports = {
@@ -149,6 +138,5 @@ module.exports = {
     updateArticles, 
     deleteArticles,
     postComment,
-    getComments,
-    GetOneComment
+    getComments
 };
