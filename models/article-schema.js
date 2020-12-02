@@ -21,7 +21,18 @@ const ArticleSchema = new Schema({
     },
     image: {
         type: String
-    }
+    },
+    commentsCount: { 
+        type: Number, 
+        default: 0 
+    },
+    createdAt: { 
+        type: Date 
+    },
+    comments: [{ 
+        type: mongoose.Types.ObjectId, 
+        ref: 'Comments' 
+    }],
 });
 
 const Article = mongoose.model('article', ArticleSchema);

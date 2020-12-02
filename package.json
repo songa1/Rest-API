@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test": "NODE_ENV=test nyc mocha --timeout 120000 ./tests/**.test.js --exit"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "chai-http": "^4.3.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -33,6 +35,11 @@
     "multer-gridfs-storage": "^4.2.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.6",
+    "nyc": "^15.1.0",
+    "sinon": "^9.2.1",
+    "supertest": "^6.0.1"
   }
 }

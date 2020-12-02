@@ -1,11 +1,10 @@
 
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
 const User = require('../models/user');
-const bcryptjs = require('bcryptjs');
+const successHandler = require('../helpers/successhandle');
+const errorRes = require('../helpers/error');
 
-
-const maxAge = 1000 * 60 * 60;
+const maxAge = 1000 * 60;
 const createToken = (id) => {
     return jwt.sign({id}, 'AISGMSchilleranziongaanzayecret', {
         expiresIn: maxAge
@@ -14,9 +13,15 @@ const createToken = (id) => {
 
 
 
-const loginGet = async (req, res)=> {
-    res.send("Login");
+const loginGet = function(req, res, next){
+    try{
+        res.send("Login")
+    }
+    catch {
+        next();
+    }
 };
+
 const loginPost = async (req, res, next)=>{
     const { email, password } = req.body;
    
@@ -45,14 +50,20 @@ const signupPost = function(req, res, next){
             httpOnly: true, 
             maxAge: maxAge * 48
         })
-        res.send({user: user._id});
+        return successHandler(res, 201, 'Added a user successfully', user._id);
     }).catch((err)=>{
-        res.status(400).send("User not created!"+ " "+err.message);
+        return errorRes(res, 500, 'Failed to create an article', error);
     });
 };
+
+const logoutGet = function(req, res, next){
+    res.cookie('jwt', '', { maxAge: 1 });
+    res.redirect('/login');
+}
 
 module.exports = {
     signupPost,
     loginGet,
-    loginPost
+    loginPost,
+    logoutGet
 }

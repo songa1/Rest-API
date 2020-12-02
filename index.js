@@ -10,7 +10,7 @@ require('dotenv').config();
 const app = express();
 
 // connect to mongodb
-mongoose.connect(process.env.dbConnection, { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex:true }).then((result)=> app.listen(process.env.PORT || 2701, ()=>{
+mongoose.connect(process.env.NODE_ENV==='test' ? process.env.dbConnectionTest : process.env.dbConnection, { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex:true }).then((result)=> app.listen(process.env.PORT || 2701, ()=>{
     console.log('Now listening to requests!');
 })).then(function(){
     console.log('db connected');
@@ -38,10 +38,11 @@ app.use('/api',routes);
 // error handling middleware
 app.use(function(err, req, res, next){
     console.log(err);
-    res.status(422).send({error: err.message});
+    res.status(422).send(err.message);
 });
 
 // Listen for request on specified port
 // app.listen(process.env.PORT || 2701, function(){
 //     console.log('Now listening to requests!');
 // })
+module.exports = app;

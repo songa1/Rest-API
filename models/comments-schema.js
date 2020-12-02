@@ -9,6 +9,9 @@ const CommentSchema = new Schema({
     },
     comment: {
         type: String
+    },
+    createdAt: {
+        type: Date
     }
 });
 
