@@ -1,10 +1,18 @@
 language: node_js
+
 node_js:
-  - 'stable'
-install: npm install
-services:
-  - postgresql
-before_script:
-  - psql -c 'create database mybrandtest;' -U postgres
-script: npm test
-after_success: npm run test
+    - 'stable'
+  
+  services:
+    - mongodb
+  
+  script:
+    - npm ci
+    - npm run coverage
+  
+  notifications:
+    email: false
+  
+  after_success:
+    - npm run coveralls
+  

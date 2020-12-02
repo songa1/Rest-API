@@ -158,18 +158,24 @@ describe('Tests related to Users and authentication', async ()=>{
     expect(res.body).to.have.property('message', 'Added a user successfully');
   })
 
-  it('Should create user(missing field)', async () => {
-    const res = await request(app).post('/api/signup').send({
-      name: 'name',
-      email: 'email@gmail.com'
-    });
-    expect(res.status).to.be.equal(500);
-    expect(res.body).to.have.property('success', false);
+  it('Should log user in', async () => {
+    await request(app).post('/api/signup').send(testUser);
+    const res = await request(app)
+      .post('/api/login')
+      .send(testUser);
+    expect(res.status).to.be.equal(200);
+    expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
-    expect(res.body).to.have.property(
-      'message',
-      'Can not add a user',
-    );
+    expect(res.body).to.have.property('message', 'Successfully logged in');
   });
+
+  it('Should log user out', async()=>{
+    await request(app).post('/api/signup').send(testUser);
+    await request(app)
+      .post('/api/login')
+      .send(testUser);
+    const res = request(app).get('/api/logout');
+    expect(res.status).to.be.equal(200);
+  })
 
 })
