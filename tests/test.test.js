@@ -301,18 +301,6 @@ describe('Tests related to owner profile', async()=>{
     "about": "his about",
     "purpose": "his purpose"
   }
-  it('Should get one  owner', async () => {
-
-    const owner = await Profile.create(ownerInfo);
-    await owner.save();
-
-    const res = await request(app).get(`/api/profile/${owner._id}`);
-    expect(res.status).to.be.equal(200);
-    expect(res.body).to.have.property('success', true);
-    expect(res.body).to.have.property('message', 'Got one owner');
-    expect(res.body).to.have.property('data');
-    expect(res.body.data).to.be.a('object');
-  });
 // delete owner
 it('Should delete owner', async () => {
     const owner = await Profile.create(ownerInfo);
