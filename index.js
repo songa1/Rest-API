@@ -10,8 +10,7 @@ require('dotenv').config();
 const app = express();
 
 // connect to mongodb
-const DB_URI= process.env.NODE_ENV;
-mongoose.connect(DB_URI==='test' ? process.env.DBTEST : process.env.DB, { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex:true }).then((result)=> app.listen(process.env.PORT || 2701, ()=>{
+mongoose.connect(process.env.NODE_ENV==='test' ? process.env.DBTEST : process.env.DB, { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex:true }).then((result)=> app.listen(process.env.PORT || 2701, ()=>{
     console.log('Now listening to requests!');
 })).then(function(){
     console.log('db connected');
