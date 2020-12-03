@@ -18,22 +18,6 @@ const getUsers = function(req, res, next){
     });
 }
 
-// get single user
-const getOneUser = function(req, res, next){
-    Profile.findOne({_id: req.params.id}).then(function(profile){
-        if(profile){
-            return successHandler(res, 200, 'Got one owner',
-            profile
-        );
-        }else{
-            res.send("User  not found!");
-            console.log("User not found!");
-        } 
-    }).catch((error)=>{
-        return errorRes(res, 500, 'Can not get owner', error);
-    });
-}
-
 // upload user to the database
 const addUser = function(req, res, next){
     const profile = new Profile({
@@ -88,7 +72,6 @@ const deleteUser = function(req, res, next){
 // exporting
 module.exports = {
     getUsers,
-    getOneUser,
     addUser, 
     updateUser, 
     deleteUser

@@ -156,6 +156,19 @@ describe('Tests related to comments:', async () => {
     expect(res.body).to.have.property('message', 'Comment have been submitted successfully');
     expect(res.body).to.be.a('object');
   });
+  // GET all comments
+  it('Should get all comments on an article', async () => {
+    const post = await Article.create(mockPost);
+    await post.save();
+    const res = await request(app).get(`/api/articles/${post._id}/comment`);
+    expect(res.status).to.be.equal(200);
+    expect(res.body).to.have.property('success', true);
+    expect(res.body).to.have.property(
+      'message',
+      'Successfully got all comments',
+    );
+    expect(res.body).to.be.a('object');
+  });
 
 });
 
