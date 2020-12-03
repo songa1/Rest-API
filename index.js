@@ -11,7 +11,7 @@ const app = express();
 
 // connect to mongodb
 
-mongoose.connect('mongodb+srv://achille:Dmsig1806110@cluster0.ixyfa.mongodb.net/mybrandtest?retryWrites=true&w=majority', { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex:true }).then((result)=> app.listen(process.env.PORT || 2701, ()=>{
+mongoose.connect(process.env.NODE_ENV==='test' ? process.env.DBTEST : process.env.DB, { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex:true }).then((result)=> app.listen(process.env.PORT || 2701, ()=>{
     console.log('Now listening to requests!');
 })).then(function(){
     console.log('db connected');
