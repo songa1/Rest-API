@@ -1,6 +1,7 @@
 const express = require('express');
 const JWT = require('jsonwebtoken');
-const {getArticles, getOneArticle, postArticles, updateArticles, deleteArticles, postComment, getComments} = require('../controller/article');
+const {getArticles, getOneArticle, postArticles, updateArticles, deleteArticles, postComment} = require('../controller/article');
+const getComments = require('../controller/comments');
 const upload = require('../upload/articles');
 const {requireAuth} = require('../configAuth/authMiddleWare');
 

@@ -1,33 +1,28 @@
-// const express = require('express');
-// const Comments = require('../models/comments-schema');
-// const mongoose = require('mongoose');
+const express = require('express');
+const mongoose = require('mongoose');
+const Article = require('../models/article-schema');
+const Comment = require('../models/comments-schema');
 
-// const getComments = function(req, res, next){
-//     Comments.find({}).then(function(comment){
-//         res.send(comment);
-//     }).catch(next);
-// };
+const successHandler = require('../helpers/successhandle');
+const errorRes = require('../helpers/error');
 
-// const postComments = function(req, res, next){
-//     // Comments.create().then(function(comment){
-//     //     res.send(comment);
-//     // }).catch(next);
-//     const comment = new Comments({
-//         name: req.body.name,
-//         comment: req.body.comment
-//     }).save().then(function(comment){
-//         res.send(comment);
-//     });
-// };
+// get comments
 
-// const deleteComments = function(req, res, next){
-//     Comments.findByIdAndDelete({_id: req.params.id}).then(function(comment){
-//         res.send(`This comment has been deleted successfully: ${comment}`);
-//     }).catch(next);
-// }
+const getComments = async (req, res)=>{
 
-// module.exports = {
-//     getComments,
-//     postComments,
-//     deleteComments
-// }
+    try{
+        let post = await Article.findById(req.params.id)
+        .populate('comments');
+            
+        return successHandler(res, 200, 'Successfully got all comments', 
+                post.comments
+                );
+
+        }catch(error){
+            console.log(error);
+            return errorRes(res, 500, 'Error getting comments', error);
+        };
+                
+}
+
+module.exports = getComments;

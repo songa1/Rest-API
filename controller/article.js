@@ -8,7 +8,7 @@ const Article = require('../models/article-schema');
 const successHandler = require('../helpers/successhandle');
 const errorRes = require('../helpers/error');
 // including comments model
-const Comments = require('../models/comments-schema');
+const Comment = require('../models/comments-schema');
 
 
 // get articles from the database
@@ -83,29 +83,11 @@ const deleteArticles = function(req, res){
         return errorRes(res, 500, "Can't delete a post", error);
     });
 }
-// get comments
 
-const getComments = async (req, res)=>{
-
-        let postFound = await Comments.findById(req.params.id)
-        .populate('comments');
-        try {
-            return successHandler(
-                res,
-                200,
-                'successfully fetched all comments',
-                postFound.comments
-              );
-        }catch(error){
-            console.log(error.message)
-            return errorRes(res, 500, 'Error while fetching comments', error);
-            
-        }              
-}
 // post comments
 const postComment = async (req, res) => {
     
-    const comment = await new Comments({
+    const comment = await new Comment({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         comment: req.body.comment,
@@ -137,6 +119,5 @@ module.exports = {
     postArticles, 
     updateArticles, 
     deleteArticles,
-    postComment,
-    getComments
+    postComment
 };
