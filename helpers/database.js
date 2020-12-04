@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 
 
-mongoose.connect(process.env.DBTEST, { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex:true })
+mongoose.connect(process.env.NODE_ENV==='test' ? 'mongodb+srv://achille:Dmsig1806110@cluster0.ixyfa.mongodb.net/mybrandtest?retryWrites=true&w=majority' : process.env.DB, { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex:true })
 .then(function(){
     console.log('db connected');
 }).catch((err)=>{
@@ -10,6 +10,3 @@ mongoose.connect(process.env.DBTEST, { useNewUrlParser: true , useUnifiedTopolog
 });
 
 mongoose.Promise = global.Promise;
-
-
-//NODE_ENV==='test' ? process.env.DBTEST : process.env.DB
