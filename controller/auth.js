@@ -50,9 +50,20 @@ const signupPost = function(req, res, next){
         res.status(400).send("User not created!"+ " "+err.message);
     });
 };
+const logoutGet = function(req, res, next){
+
+    try {
+        res.cookie('jwt', '', { maxAge: 1 });
+        res.redirect('/login');
+        res.status(200).json('Logout successfully');
+    } catch (error){
+        res.status(500).json('Can not log out');
+    }
+}
 
 module.exports = {
     signupPost,
     loginGet,
-    loginPost
+    loginPost,
+    logoutGet
 }
