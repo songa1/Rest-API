@@ -5,20 +5,16 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 mongoose.set('useFindAndModify', false);
 require('dotenv').config();
+require('./helpers/database');
 
 // I'm going to setup my express app
 const app = express();
 
 // connect to mongodb
 
-mongoose.connect(process.env.NODE_ENV==='test' ? process.env.DBTEST : process.env.DB, { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex:true }).then((result)=> app.listen(process.env.PORT || 2701, ()=>{
+app.listen(process.env.PORT || 2701, ()=>{
     console.log('Now listening to requests!');
-})).then(function(){
-    console.log('db connected');
-}).catch((err)=>{
-    console.log(err.message);
 });
-mongoose.Promise = global.Promise;
 
 // make uploads folder publicly accessible
 app.use('/uploads', express.static('uploads'));
