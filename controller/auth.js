@@ -27,7 +27,7 @@ const loginPost = async (req, res, next)=>{
             httpOnly: true, 
             maxAge: maxAge * 48
         })
-        res.status(200).json({user: user._id});
+        res.status(200).json({user: user._id, token});
     }
     catch (err) {
         console.log(err)
