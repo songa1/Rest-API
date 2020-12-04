@@ -28,6 +28,7 @@ const mockPost = {
 
 chai.use(chaiHttp);
 
+
 // test homepage
 describe('Test for homepage', async()=>{
   it('Should get the homepage', async()=>{
@@ -172,7 +173,7 @@ describe('Tests related to comments:', async () => {
 
 });
 
-// test on users and auth
+// test on users
 describe('Tests related to Users and authentication', async ()=>{
   beforeEach(async () => {
     await User.deleteMany({});
