@@ -8,6 +8,7 @@ const skillRoute = require('./skills');
 const projectRoute = require('./project');
 const commentRoute = require('./comments');
 const homeIndex = require('./home');
+const authRoute = require('./auth');
 
 
 
@@ -18,6 +19,7 @@ router.use('/profile', profileRoute);
 router.use('/skills', skillRoute);
 router.use('/projects', projectRoute);
 router.use('/comments', commentRoute);
+router.use('/', authRoute);
 
 module.exports = router;
 
