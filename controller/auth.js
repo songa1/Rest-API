@@ -4,7 +4,7 @@ const User = require('../models/user');
 const successHandler = require('../helpers/successhandle');
 const errorRes = require('../helpers/error');
 
-const maxAge = 1000 * 60;
+const maxAge = 1000 * 60*60;
 const createToken = (id) => {
     return jwt.sign({id}, 'AISGMSchilleranziongaanzayecret', {
         expiresIn: maxAge
@@ -32,7 +32,7 @@ const loginPost = async (req, res, next)=>{
             httpOnly: true, 
             maxAge: maxAge * 48
         })
-        return successHandler(res, 201, 'Successfully logged in', user._id);
+        return successHandler(res, 201, 'Successfully logged in',);
     }
     catch (err) {
         return errorRes(res, 500, 'Failed to login', error);
