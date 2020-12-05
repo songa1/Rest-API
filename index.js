@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 // initialize routes
-app.use('/api',routes);
+app.use('/',routes);
 
 // error handling middleware
 app.use(function(err, req, res, next){

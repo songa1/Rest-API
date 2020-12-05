@@ -32,7 +32,7 @@ chai.use(chaiHttp);
 // test homepage
 describe('Test for homepage', async()=>{
   it('Should get the homepage', async()=>{
-    let res = await request(app).get('/api');
+    let res = await request(app).get('/');
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.have.property('message', "You have now access to my API application, It's working!");
@@ -41,7 +41,7 @@ describe('Test for homepage', async()=>{
 
 describe('Unknown route', () => {
   it('Should return Not found(any request)', async () => {
-    const res = await request(app).get('/api/unknown');
+    const res = await request(app).get('/unknown');
     expect(res.status).to.be.equal(404);
     expect(res.body).to.be.a('object');
   });
@@ -58,7 +58,7 @@ describe('Testing articles', async ()=>{
     // Create a post
     it('Should create a post', async () => {
         const res = await request(app)
-          .post('/api/articles')
+          .post('/articles')
           .field('title', mockPost.title)
           .field('author', mockPost.author)
           .field('summary', mockPost.summary)
@@ -80,7 +80,7 @@ describe('Testing articles', async ()=>{
         const article = await Article.create(mockPost);
         await article.save();
     
-        const res = await request(app).get(`/api/articles/${article._id}`);
+        const res = await request(app).get(`/articles/${article._id}`);
         expect(res.status).to.be.equal(201);
         expect(res.body).to.have.property('success', true);
         expect(res.body).to.have.property('message', 'Got single article');
@@ -94,7 +94,7 @@ describe('Testing articles', async ()=>{
       });
       // get all articles
       it('Should Get all articles from database', async () => {
-        const res = await request(app).get('/api/articles');
+        const res = await request(app).get('/articles');
         expect(res.status).to.be.equal(200);
         expect(res.body).to.have.property('message', 'Successfully got all articles');
         expect(res.body).to.have.property('success', true);
@@ -108,7 +108,7 @@ describe('Testing articles', async ()=>{
         const article = await Article.create(mockPost);
         await article.save();
     
-        const res = await request(app).delete(`/api/articles/${article._id}`);
+        const res = await request(app).delete(`/articles/${article._id}`);
         expect(res.status).to.be.equal(200);
         expect(res.body).to.have.property('success', true);
         expect(res.body).to.be.a('object');
@@ -126,7 +126,7 @@ describe('Testing articles', async ()=>{
         await article.save();
     
         const res = await request(app)
-        .put(`/api/articles/${article._id}`)
+        .put(`/articles/${article._id}`)
         .field('title', postUpdate.title)
         .field('author', postUpdate.author)
         .field('summary', postUpdate.summary)
@@ -150,7 +150,7 @@ describe('Tests related to comments:', async () => {
     const article = await Article.create(mockPost);
     await article.save();
     const res = await request(app)
-      .post(`/api/articles/${article._id}/comment`)
+      .post(`/articles/${article._id}/comment`)
       .send(testComment);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
@@ -161,7 +161,7 @@ describe('Tests related to comments:', async () => {
   it('Should get all comments on an article', async () => {
     const post = await Article.create(mockPost);
     await post.save();
-    const res = await request(app).get(`/api/articles/${post._id}/comment`);
+    const res = await request(app).get(`/articles/${post._id}/comment`);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.have.property(
@@ -187,7 +187,7 @@ describe('Tests related to Users and authentication', async ()=>{
   }
   // Add a user
   it('Should add a new user', async()=>{
-    const res = await request(app).post('/api/signup').send(testUser);
+    const res = await request(app).post('/signup').send(testUser);
     expect(res.status).to.be.equal(201);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -195,9 +195,9 @@ describe('Tests related to Users and authentication', async ()=>{
   })
   // login
   it('Should log user in', async () => {
-    await request(app).post('/api/signup').send(testUser);
+    await request(app).post('/signup').send(testUser);
     const res = await request(app)
-      .post('/api/login')
+      .post('/login')
       .send(testUser);
     expect(res.status).to.be.equal(201);
     expect(res.body).to.have.property('success', true);
@@ -224,7 +224,7 @@ describe('Tests related to queries', async()=>{
   // testing the POST of queries
   it('Should create a query', async () => {
     const res = await request(app)
-      .post('/api/queries').send(testMessage);
+      .post('/queries').send(testMessage);
     expect(res.status).to.be.equal(201);
     expect(res.body).to.have.property('message','New message recorded');
     expect(res.body).to.be.have.property('data');
@@ -237,7 +237,7 @@ describe('Tests related to queries', async()=>{
 
   //Test on getting all queries in the database
   it('Should Get all queries from database', async () => {
-    const res = await request(app).get('/api/queries');
+    const res = await request(app).get('/queries');
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('message', 'Successfully got all queries');
     expect(res.body).to.have.property('success', true);
@@ -250,7 +250,7 @@ describe('Tests related to queries', async()=>{
     const query = await Query.create(testMessage);
     await query.save();
 
-    const res = await request(app).delete(`/api/queries/${query._id}`);
+    const res = await request(app).delete(`/queries/${query._id}`);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -272,7 +272,7 @@ describe('Tests related to owner profile', async()=>{
   //Add owner's data
   it('Should create a new owner', async () => {
     const res = await request(app)
-      .post('/api/profile')
+      .post('/profile')
       .field('name','myname')
       .field('role', 'developer')
       .field('about', 'my about')
@@ -289,7 +289,7 @@ describe('Tests related to owner profile', async()=>{
   });
   // GET owner's info
   it('Should get owner info', async () => {
-    const res = await request(app).get('/api/profile');
+    const res = await request(app).get('/profile');
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('message', 'Successfully got owner');
     expect(res.body).to.have.property('success', true);
@@ -307,7 +307,7 @@ it('Should delete owner', async () => {
     const owner = await Profile.create(ownerInfo);
     await owner.save();
 
-    const res = await request(app).delete(`/api/profile/${owner._id}`);
+    const res = await request(app).delete(`/profile/${owner._id}`);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -319,7 +319,7 @@ it('Should delete owner', async () => {
     await owner.save();
 
     const res = await request(app)
-    .put(`/api/profile/${owner._id}`)
+    .put(`/profile/${owner._id}`)
     .field('name', ownerInfo.name)
     .field('role', ownerInfo.role)
     .field('about', ownerInfo.about)
@@ -350,7 +350,7 @@ describe('Tests related to projects', async()=>{
   //Add NEW PROJECT
   it('Should create a new project', async () => {
     const res = await request(app)
-      .post('/api/projects')
+      .post('/projects')
       .field('title',testProject.title)
       .field('description', testProject.description)
       .field('link', testProject.link)
@@ -365,7 +365,7 @@ describe('Tests related to projects', async()=>{
   });
   // GET PROJECTS
   it('Should get projects', async () => {
-    const res = await request(app).get('/api/projects');
+    const res = await request(app).get('/projects');
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('message', 'Successfully got projects');
     expect(res.body).to.have.property('success', true);
@@ -377,7 +377,7 @@ it('Should delete a project', async () => {
     const project = await Projects.create(testProject);
     await project.save();
 
-    const res = await request(app).delete(`/api/projects/${project._id}`);
+    const res = await request(app).delete(`/projects/${project._id}`);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -389,7 +389,7 @@ it('Should delete a project', async () => {
     await project.save();
 
     const res = await request(app)
-    .put(`/api/projects/${project._id}`)
+    .put(`/projects/${project._id}`)
     .field('title', testProject.title)
     .field('description', testProject.description)
     .field('link', testProject.link)
@@ -417,7 +417,7 @@ describe('Tests related to skills', async()=>{
   //Add new skill
   it('Should create a new skill', async () => {
     const res = await request(app)
-      .post('/api/skills')
+      .post('/skills')
       .field('title',testSkill.title)
       .field('category', testSkill.category)
       .attach('image', path.resolve(__dirname, './img/ubutumwa.jpg'));
@@ -428,7 +428,7 @@ describe('Tests related to skills', async()=>{
   });
   // GET owner's info
   it('Should get skills', async () => {
-    const res = await request(app).get('/api/skills');
+    const res = await request(app).get('/skills');
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('message', 'Got skills');
     expect(res.body).to.have.property('success', true);
@@ -440,7 +440,7 @@ it('Should delete skill', async () => {
     const skill = await Skill.create(testSkill);
     await skill.save();
 
-    const res = await request(app).delete(`/api/skills/${skill._id}`);
+    const res = await request(app).delete(`/skills/${skill._id}`);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -452,7 +452,7 @@ it('Should delete skill', async () => {
     await skill.save();
 
     const res = await request(app)
-    .put(`/api/skills/${skill._id}`)
+    .put(`/skills/${skill._id}`)
     .field('title', testSkill.title)
     .field('category', testSkill.category)
     .attach('image', path.resolve(__dirname, './img/blogger.png'));
