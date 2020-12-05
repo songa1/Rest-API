@@ -15,7 +15,7 @@ const createToken = (id) => {
 
 const loginGet = function(req, res, next){
     try{
-        res.send("Login")
+        res.send("Login to continue")
     }
     catch {
         next();
@@ -32,7 +32,7 @@ const loginPost = async (req, res, next)=>{
             httpOnly: true, 
             maxAge: maxAge * 48
         })
-        return successHandler(res, 201, 'Successfully logged in',);
+        return successHandler(res, 201, 'Successfully logged in',token);
     }
     catch (err) {
         return errorRes(res, 500, 'Failed to login', error);

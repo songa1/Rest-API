@@ -6,14 +6,14 @@ const requireAuth = (req, res, next)=>{
         jwt.verify(token, 'AISGMSchilleranziongaanzayecret', (err, decodedToken)=>{
             if(err){
                 console.log(err);
-                res.redirect('/api/login');
+                res.redirect('/login');
             }else{
                 console.log(decodedToken);
                 next();
             }
         })
     }else{
-        res.redirect('/api/login');
+        res.redirect('/login');
     }
 }
 

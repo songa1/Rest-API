@@ -8,15 +8,15 @@ const {requireAuth} = require('../configAuth/authMiddleWare');
 const router = express.Router();
 
 
-router.post('/', upload.single('image'), postArticles);
+router.post('/',requireAuth, upload.single('image'), postArticles);
 router.get('/', getArticles);
 router.get('/:id', getOneArticle);
-router.put('/:id', upload.single('image'), updateArticles);
-router.delete('/:id', deleteArticles);
+router.put('/:id',requireAuth, upload.single('image'), updateArticles);
+router.delete('/:id',requireAuth, deleteArticles);
 
 router.post('/:id/comment', postComment);
 router.get('/:id/comment', getComments);
-router.delete('/:id/comment/:id', deleteComment)
+router.delete('/:id/comment/:id',requireAuth, deleteComment)
 
 
 module.exports = router;
