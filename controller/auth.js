@@ -54,6 +54,16 @@ const signupPost = function(req, res, next){
         return errorRes(res, 500, 'Failed to signup', error);
     });
 };
+const logoutGet = function(req, res, next){
+
+    try {
+        res.cookie('jwt', '', { maxAge: 1 });
+        res.redirect('/login');
+        res.status(200).json('Logout successfully');
+    } catch (error){
+        res.status(500).json('Can not log out');
+    }
+}
 
 const logoutGet = function(req, res, next){
 
