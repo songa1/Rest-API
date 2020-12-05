@@ -4,7 +4,7 @@ const express = require('express');
 // defining storage for files
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, './uploads/user-profile');
+        cb(null, './uploads/profile');
     },
     filename: function(req, file, cb){
         cb(null, file.fieldname+"-"+file.originalname);

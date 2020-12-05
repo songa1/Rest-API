@@ -10,9 +10,13 @@ const errorRes = require('../helpers/error');
 // get users from the database
 const getUsers = function(req, res, next){
     Profile.find({}).then(function(profile){
+        if(profile==0){
+            res.status(404).json('No owner info');
+        }else{
         return successHandler(res, 200, 'Successfully got owner',
             profile
         );
+        }
     }).catch((error)=>{
         return errorRes(res, 500, 'Can not get owner', error);
     });

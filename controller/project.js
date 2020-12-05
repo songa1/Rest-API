@@ -7,7 +7,11 @@ const errorRes = require('../helpers/error');
 
 const getProjects = function(req, res, next){
     Projects.find({}).then(function(project){
-        return successHandler(res, 200, 'Successfully got projects', project);
+        if(project==0){
+            res.status(404).json('No project');
+        }else{
+            return successHandler(res, 200, 'Successfully got projects', project);
+        }
     }).catch((error)=>{
         return errorRes(res, 500, 'Failed to get projects', error);
     });
