@@ -1,6 +1,6 @@
 const express = require('express');
 const JWT = require('jsonwebtoken');
-const {getArticles, getOneArticle, postArticles, updateArticles, deleteArticles, postComment} = require('../controller/article');
+const {getArticles, getOneArticle, postArticles, updateArticles, deleteArticles, postComment, deleteComment} = require('../controller/article');
 const getComments = require('../controller/comments');
 const upload = require('../upload/articles');
 const {requireAuth} = require('../configAuth/authMiddleWare');
@@ -16,6 +16,7 @@ router.delete('/:id', deleteArticles);
 
 router.post('/:id/comment', postComment);
 router.get('/:id/comment', getComments);
+router.delete('/:id/comment/:id', deleteComment)
 
 
 module.exports = router;

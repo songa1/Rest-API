@@ -14,12 +14,15 @@ const getComments = async (req, res)=>{
         let post = await Article.findById(req.params.id)
         .populate('comments');
             
-        return successHandler(res, 200, 'Successfully got all comments', 
+        
+        if(post.comments==0){
+            res.status(404).json('No comments for this post');
+        }else{
+            return successHandler(res, 200, 'Successfully got all comments', 
                 post.comments
-                );
-
+            );
+        }
         }catch(error){
-            console.log(error);
             return errorRes(res, 500, 'Error getting comments', error);
         };
                 

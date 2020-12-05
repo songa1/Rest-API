@@ -59,17 +59,6 @@ const logoutGet = function(req, res, next){
     try {
         res.cookie('jwt', '', { maxAge: 1 });
         res.redirect('/login');
-        res.status(200).json('Logout successfully');
-    } catch (error){
-        res.status(500).json('Can not log out');
-    }
-}
-
-const logoutGet = function(req, res, next){
-
-    try {
-        res.cookie('jwt', '', { maxAge: 1 });
-        res.redirect('/login');
         return successHandler(res, 200, 'Logout successfully');
     } catch (error){
         return errorRes(res, 500, 'Can not log out', error);

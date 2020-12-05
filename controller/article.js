@@ -110,6 +110,43 @@ const postComment = async (req, res) => {
 
 };
 
+// delete comments
+const deleteComment = async (req, res) => {
+    
+    Comment.findByIdAndDelete({_id: req.params.id}).then(function(comment){
+        const post = Article.findById(req.params.id);
+        post.commentsCount -=1;
+
+        // if(!post){
+        //     res.status('404').json('Article not found!');
+        // }else{
+        //     post.comments.push(comment._id);
+        //     post.commentsCount -= 1;
+        //     post.save();
+        return successHandler(res, 200, 'This comment has been deleted successfully');
+    }).catch((error)=>{
+        return errorRes(res, 500, "Can't delete a comment", error);
+    });
+    //     const post = await Article.findById(req.params.id);
+    //     if(!post){
+    //         res.status(404).json('Article not found!');
+    //     }else{
+    //         post.comments.push(comment._id);
+    //         post.commentsCount += 1;
+    //         await post.save();
+    //     }
+    //     Comment.findById().then(function(article){
+    //         return successHandler(res, 200, 'This article has been deleted successfully');
+    //     }).catch((error)=>{
+    //         return errorRes(res, 500, "Can't delete a post", error);
+    //     });
+    // return successHandler(res, 200, 'Comment have been submitted successfully', comment);
+    // }).catch(async(err)=>{
+    //     return errorRes(res, 500, "Adding comment failed", error);
+    // });
+
+};
+
 
 
 // exporting
@@ -119,5 +156,6 @@ module.exports = {
     postArticles, 
     updateArticles, 
     deleteArticles,
-    postComment
+    postComment,
+    deleteComment
 };

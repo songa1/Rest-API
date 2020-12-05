@@ -10,9 +10,14 @@ const errorRes = require('../helpers/error');
 // get skills from the database
 const getSkills = function(req, res, next){
     Skill.find({}).then(function(skill){
-        return successHandler(res, 200, 'Got skills', {
-            skill
-        });
+
+        if(skill==0){
+            res.status(404).json('No skills');
+        }else{
+            return successHandler(res, 200, 'Got skills', {
+                skill
+            });
+        }
     }).catch((error)=>{
         return errorRes(res, 500, 'Can not get skills', error);
     });
