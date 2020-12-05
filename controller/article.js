@@ -14,10 +14,14 @@ const Comment = require('../models/comments-schema');
 // get articles from the database
 const getArticles = function(req, res){
     Article.find({}).then(function(articles){
+        if(articles){
         return successHandler(res, 200, 'Successfully got all articles', {
             Articles: articles.length,
             articles
         });
+        }else{
+            res.status(404).json('Articles not found');
+        }
     }).catch((error)=>{
         return errorRes(res, 500, 'Error getting articles', error);
     });
