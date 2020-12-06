@@ -6,10 +6,10 @@ const {requireAuth} = require('../configAuth/authMiddleWare');
 const router = express.Router();
 
 
-router.post('/', upload.single('image'), addProjects);
+router.post('/',requireAuth, upload.single('image'), addProjects);
 router.get('/', getProjects);
-router.put('/:id', upload.single('image'), updateProject);
-router.delete('/:id', deleteProjects);
+router.put('/:id',requireAuth, upload.single('image'), updateProject);
+router.delete('/:id',requireAuth, deleteProjects);
 
 
 module.exports = router;

@@ -13,6 +13,7 @@ const Comments = require('../models/comments-schema');
 const Profile = require('../models/profile-schema');
 const Projects = require('../models/project-schema');
 const Skill = require('../models/skills-schema');
+const jwt = require('jsonwebtoken');
 
 const { it, describe, beforeEach, afterEach } = mocha;
 const {expect} = chai;
@@ -27,6 +28,8 @@ const mockPost = {
   };
 
 chai.use(chaiHttp);
+
+const cookieValue = 'jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2EzOWIzNzNiN2E1MDAxNzYwNDMzZSIsImlhdCI6MTYwNzI4MDUzMywiZXhwIjoxNjEwODgwNTMzfQ.0hYGRpVq4ypub1M1B8S9YWfiP9P6YXxeNlrkemUi2vk'; 
 
 
 // test homepage
@@ -46,10 +49,14 @@ describe('Unknown route', () => {
     expect(res.body).to.be.a('object');
   });
 });
-
+const userData = {
+  "email": "me@email.com",
+  "password": "password"
+}
 // Test on article requests
 describe('Testing articles', async ()=>{
     beforeEach(async () => {
+      
         await Article.deleteMany({});
     });
     afterEach(async () => {
@@ -59,6 +66,7 @@ describe('Testing articles', async ()=>{
     it('Should create a post', async () => {
         const res = await request(app)
           .post('/articles')
+          .set('Cookie',cookieValue)
           .field('title', mockPost.title)
           .field('author', mockPost.author)
           .field('summary', mockPost.summary)
@@ -108,7 +116,7 @@ describe('Testing articles', async ()=>{
         const article = await Article.create(mockPost);
         await article.save();
     
-        const res = await request(app).delete(`/articles/${article._id}`);
+        const res = await request(app).delete(`/articles/${article._id}`).set('Cookie',cookieValue);
         expect(res.status).to.be.equal(200);
         expect(res.body).to.have.property('success', true);
         expect(res.body).to.be.a('object');
@@ -127,6 +135,7 @@ describe('Testing articles', async ()=>{
     
         const res = await request(app)
         .put(`/articles/${article._id}`)
+        .set('Cookie',cookieValue)
         .field('title', postUpdate.title)
         .field('author', postUpdate.author)
         .field('summary', postUpdate.summary)
@@ -187,7 +196,7 @@ describe('Tests related to Users and authentication', async ()=>{
   }
   // Add a user
   it('Should add a new user', async()=>{
-    const res = await request(app).post('/signup').send(testUser);
+    const res = await request(app).post('/signup').set('Cookie',cookieValue).send(testUser);
     expect(res.status).to.be.equal(201);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -195,16 +204,16 @@ describe('Tests related to Users and authentication', async ()=>{
   })
   // login
   it('Should log user in', async () => {
-    await request(app).post('/signup').send(testUser);
+    await request(app).post('/login').send(testUser);
     const res = await request(app)
       .post('/login')
+      .set('Cookie', cookieValue)
       .send(testUser);
     expect(res.status).to.be.equal(201);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
     expect(res.body).to.have.property('message', 'Successfully logged in');
   });
-
 })
 
 // Testing queries
@@ -237,7 +246,7 @@ describe('Tests related to queries', async()=>{
 
   //Test on getting all queries in the database
   it('Should Get all queries from database', async () => {
-    const res = await request(app).get('/queries');
+    const res = await request(app).get('/queries').set('Cookie',cookieValue);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('message', 'Successfully got all queries');
     expect(res.body).to.have.property('success', true);
@@ -250,7 +259,7 @@ describe('Tests related to queries', async()=>{
     const query = await Query.create(testMessage);
     await query.save();
 
-    const res = await request(app).delete(`/queries/${query._id}`);
+    const res = await request(app).delete(`/queries/${query._id}`).set('Cookie',cookieValue);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -273,6 +282,7 @@ describe('Tests related to owner profile', async()=>{
   it('Should create a new owner', async () => {
     const res = await request(app)
       .post('/profile')
+      .set('Cookie',cookieValue)
       .field('name','myname')
       .field('role', 'developer')
       .field('about', 'my about')
@@ -307,7 +317,7 @@ it('Should delete owner', async () => {
     const owner = await Profile.create(ownerInfo);
     await owner.save();
 
-    const res = await request(app).delete(`/profile/${owner._id}`);
+    const res = await request(app).delete(`/profile/${owner._id}`).set('Cookie',cookieValue);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -320,6 +330,7 @@ it('Should delete owner', async () => {
 
     const res = await request(app)
     .put(`/profile/${owner._id}`)
+    .set('Cookie',cookieValue)
     .field('name', ownerInfo.name)
     .field('role', ownerInfo.role)
     .field('about', ownerInfo.about)
@@ -351,6 +362,7 @@ describe('Tests related to projects', async()=>{
   it('Should create a new project', async () => {
     const res = await request(app)
       .post('/projects')
+      .set('Cookie',cookieValue)
       .field('title',testProject.title)
       .field('description', testProject.description)
       .field('link', testProject.link)
@@ -377,7 +389,7 @@ it('Should delete a project', async () => {
     const project = await Projects.create(testProject);
     await project.save();
 
-    const res = await request(app).delete(`/projects/${project._id}`);
+    const res = await request(app).delete(`/projects/${project._id}`).set('Cookie',cookieValue);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -390,6 +402,7 @@ it('Should delete a project', async () => {
 
     const res = await request(app)
     .put(`/projects/${project._id}`)
+    .set('Cookie',cookieValue)
     .field('title', testProject.title)
     .field('description', testProject.description)
     .field('link', testProject.link)
@@ -418,6 +431,7 @@ describe('Tests related to skills', async()=>{
   it('Should create a new skill', async () => {
     const res = await request(app)
       .post('/skills')
+      .set('Cookie',cookieValue)
       .field('title',testSkill.title)
       .field('category', testSkill.category)
       .attach('image', path.resolve(__dirname, './img/ubutumwa.jpg'));
@@ -440,7 +454,7 @@ it('Should delete skill', async () => {
     const skill = await Skill.create(testSkill);
     await skill.save();
 
-    const res = await request(app).delete(`/skills/${skill._id}`);
+    const res = await request(app).delete(`/skills/${skill._id}`).set('Cookie',cookieValue);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
@@ -453,6 +467,7 @@ it('Should delete skill', async () => {
 
     const res = await request(app)
     .put(`/skills/${skill._id}`)
+    .set('Cookie',cookieValue)
     .field('title', testSkill.title)
     .field('category', testSkill.category)
     .attach('image', path.resolve(__dirname, './img/blogger.png'));
