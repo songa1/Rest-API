@@ -13,12 +13,12 @@ const createToken = (id) => {
 
 
 
-const loginGet = function(req, res, next){
+const loginGet = function(req, res){
     try{
-        res.send("Login")
+        return successHandler(res, 200, 'Login page',);
     }
     catch {
-        next();
+        return errorRes(res, 500, 'Can not get this page', error);
     }
 };
 

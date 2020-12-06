@@ -53,6 +53,7 @@ const userData = {
   "email": "me@email.com",
   "password": "password"
 }
+
 // Test on article requests
 describe('Testing articles', async ()=>{
     beforeEach(async () => {
@@ -83,6 +84,15 @@ describe('Testing articles', async ()=>{
         expect(res.body.data).to.be.have.property('summary');
         expect(res.body.data).to.be.have.property('content');
       });
+      //if no cookies found
+      it('Should not create a post', async () => {
+        const res = await request(app)
+          .post('/articles')
+          .field('title', mockPost.title);
+        expect(res.status).to.be.equal(500);
+        expect(res.body).to.have.property('message','Login to continue');
+      });
+      
       // get single article
       it('Should get one  article', async () => {
         const article = await Article.create(mockPost);
@@ -100,6 +110,12 @@ describe('Testing articles', async ()=>{
         expect(res.body.data).to.be.have.property('content');
         expect(res.body.data).to.have.property('_id');
       });
+      it('Should get article not found', async () => {
+        const article = "";
+    
+        const res = await request(app).get(`/articles/${article._id}`);
+        expect(res.status).to.be.equal(500);
+      });
       // get all articles
       it('Should Get all articles from database', async () => {
         const res = await request(app).get('/articles');
@@ -111,6 +127,7 @@ describe('Testing articles', async ()=>{
         expect(res.body.data).to.have.property('articles');
         expect(res.body.data.articles).to.be.a('array');
     });
+    
     // delete an article
     it('Should delete a post', async () => {
         const article = await Article.create(mockPost);
@@ -202,9 +219,20 @@ describe('Tests related to Users and authentication', async ()=>{
     expect(res.body).to.be.a('object');
     expect(res.body).to.have.property('message', 'Added a user successfully');
   })
+  it('Should not add a new user', async()=>{
+    const res = await request(app).post('/signup').send(testUser);
+    expect(res.status).to.be.equal(500);
+    expect(res.body).to.have.property('success', false);
+  })
+  it('Should get login page', async ()=>{
+    const res = await request(app).get('/login');
+    expect(res.status).to.be.equal(200);
+
+  })
   // login
   it('Should log user in', async () => {
-    await request(app).post('/login').send(testUser);
+    
+    await request(app).post('/signup').set('Cookie',cookieValue).send(testUser);
     const res = await request(app)
       .post('/login')
       .set('Cookie', cookieValue)
@@ -251,6 +279,12 @@ describe('Tests related to queries', async()=>{
     expect(res.body).to.have.property('message', 'Successfully got all queries');
     expect(res.body).to.have.property('success', true);
     expect(res.body).to.be.a('object');
+  });
+
+
+  it('Should not Get any query if unauth', async () => {
+    const res = await request(app).get('/queries');
+    expect(res.status).to.be.equal(500);
   });
 
 
