@@ -11,7 +11,7 @@ const errorRes = require('../helpers/error');
 const getSkills = function(req, res, next){
     Skill.find({}).then(function(skill){
 
-        if(skill==0){
+        if(!skill){
             res.status(404).json('No skills');
         }else{
             return successHandler(res, 200, 'Got skills', {

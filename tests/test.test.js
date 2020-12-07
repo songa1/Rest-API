@@ -9,7 +9,7 @@ const chaiHttp = require('chai-http');
 const User = require('../models/user');
 const Queries = require('../models/quries-schema');
 const Query = require('../models/quries-schema');
-const Comments = require('../models/comments-schema');
+const Comment = require('../models/comments-schema');
 const Profile = require('../models/profile-schema');
 const Projects = require('../models/project-schema');
 const Skill = require('../models/skills-schema');
@@ -187,6 +187,7 @@ describe('Tests related to comments:', async () => {
   it('Should get all comments on an article', async () => {
     const post = await Article.create(mockPost);
     await post.save();
+    await request(app).post(`/articles/${post._id}/comment`).send(testComment);
     const res = await request(app).get(`/articles/${post._id}/comment`);
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('success', true);
@@ -333,6 +334,7 @@ describe('Tests related to owner profile', async()=>{
   });
   // GET owner's info
   it('Should get owner info', async () => {
+    await request(app).post('/profile').set('Cookie',cookieValue).send(ownerInfo);
     const res = await request(app).get('/profile');
     expect(res.status).to.be.equal(200);
     expect(res.body).to.have.property('message', 'Successfully got owner');
