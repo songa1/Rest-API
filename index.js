@@ -33,10 +33,10 @@ app.use(bodyParser.json());
 app.use('/',routes);
 
 // error handling middleware
-app.use(function(err, req, res, next){
-    console.log(err);
-    res.status(422).send(err.message);
-});
+// app.use(function(err, req, res, next){
+//     console.log(err);
+//     res.status(422).send(err.message);
+// });
 
 // Listen for request on specified port
 // app.listen(process.env.PORT || 2701, function(){

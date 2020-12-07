@@ -5,7 +5,7 @@ const {requireAuth} = require('../configAuth/authMiddleWare');
 const router = express.Router();
 
 
-router.post('/',postQueries);
+router.post('/', postQueries);
 router.get('/',requireAuth, getQueries);
 router.delete('/:id',requireAuth, deleteQueries);
 

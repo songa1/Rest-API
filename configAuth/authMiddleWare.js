@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const successHandler = require('../helpers/successhandle');
+const errorRes = require('../helpers/error');
 
 const requireAuth = (req, res, next)=>{
     const token = req.cookies.jwt;
@@ -13,7 +15,7 @@ const requireAuth = (req, res, next)=>{
             }
         })
     }else{
-        res.redirect('/login');
+        return errorRes(res, 500, 'Login to continue');
     }
 }
 

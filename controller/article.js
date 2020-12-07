@@ -33,7 +33,7 @@ const getOneArticle = function(req, res){
         if(article){
             return successHandler(res, 201, 'Got single article', article);
         }else{
-            res.json("Article not found!");
+            res.status(404).json("Article not found!");
             console.log("Article not found!");
         } 
     }).catch((error)=>{
