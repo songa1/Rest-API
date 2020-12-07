@@ -5,7 +5,7 @@ const errorRes = require('../helpers/error');
 const requireAuth = (req, res, next)=>{
     const token = req.cookies.jwt;
     if(token){
-        jwt.verify(token, 'AISGMSchilleranziongaanzayecret', (err, decodedToken)=>{
+        jwt.verify(token, process.env.SECRET, (err, decodedToken)=>{
             if(err){
                 console.log(err);
                 res.redirect('/api/login');

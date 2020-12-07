@@ -6,7 +6,7 @@ const errorRes = require('../helpers/error');
 
 const maxAge = 1000 * 60*60;
 const createToken = (id) => {
-    return jwt.sign({id}, 'AISGMSchilleranziongaanzayecret', {
+    return jwt.sign({id}, process.env.SECRET, {
         expiresIn: maxAge
     });
 }
